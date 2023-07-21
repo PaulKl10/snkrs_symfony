@@ -46,8 +46,8 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private ?\DateTimeInterface $birthdate = null;
 
     #[ORM\ManyToOne(inversedBy: 'users')]
-    #[ORM\JoinColumn(nullable: false)]
-    private ?Adress $Adress_id = null;
+    #[ORM\JoinColumn(nullable: true)]
+    private ?Adress $Adress = null;
 
     #[ORM\OneToMany(mappedBy: 'User', targetEntity: PurchaseNft::class, orphanRemoval: true)]
     private Collection $purchaseNfts;
@@ -206,14 +206,14 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
-    public function getAdressId(): ?Adress
+    public function getAdress(): ?Adress
     {
-        return $this->Adress_id;
+        return $this->Adress;
     }
 
-    public function setAdressId(?Adress $Adress_id): static
+    public function setAdress(?Adress $Adress): static
     {
-        $this->Adress_id = $Adress_id;
+        $this->Adress = $Adress;
 
         return $this;
     }

@@ -85,7 +85,7 @@ class Adress
     {
         if (!$this->users->contains($user)) {
             $this->users->add($user);
-            $user->setAdressId($this);
+            $user->setAdress($this);
         }
 
         return $this;
@@ -95,8 +95,8 @@ class Adress
     {
         if ($this->users->removeElement($user)) {
             // set the owning side to null (unless already changed)
-            if ($user->getAdressId() === $this) {
-                $user->setAdressId(null);
+            if ($user->getAdress() === $this) {
+                $user->setAdress(null);
             }
         }
 
