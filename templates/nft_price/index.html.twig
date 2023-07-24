@@ -1,0 +1,37 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}NftPrice index{% endblock %}
+
+{% block body %}
+    <h1>NftPrice index</h1>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Price_date</th>
+                <th>Price_eth_value</th>
+                <th>actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for nft_price in nft_prices %}
+            <tr>
+                <td>{{ nft_price.id }}</td>
+                <td>{{ nft_price.priceDate ? nft_price.priceDate|date('Y-m-d') : '' }}</td>
+                <td>{{ nft_price.priceEthValue }}</td>
+                <td>
+                    <a href="{{ path('app_nft_price_show', {'id': nft_price.id}) }}">show</a>
+                    <a href="{{ path('app_nft_price_edit', {'id': nft_price.id}) }}">edit</a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="4">no records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="{{ path('app_nft_price_new') }}">Create new</a>
+{% endblock %}

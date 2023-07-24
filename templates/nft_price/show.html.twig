@@ -1,0 +1,30 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}NftPrice{% endblock %}
+
+{% block body %}
+    <h1>NftPrice</h1>
+
+    <table class="table">
+        <tbody>
+            <tr>
+                <th>Id</th>
+                <td>{{ nft_price.id }}</td>
+            </tr>
+            <tr>
+                <th>Price_date</th>
+                <td>{{ nft_price.priceDate ? nft_price.priceDate|date('Y-m-d') : '' }}</td>
+            </tr>
+            <tr>
+                <th>Price_eth_value</th>
+                <td>{{ nft_price.priceEthValue }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <a href="{{ path('app_nft_price_index') }}">back to list</a>
+
+    <a href="{{ path('app_nft_price_edit', {'id': nft_price.id}) }}">edit</a>
+
+    {{ include('nft_price/_delete_form.html.twig') }}
+{% endblock %}
