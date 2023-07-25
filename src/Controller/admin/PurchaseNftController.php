@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Controller;
+namespace App\Controller\admin;
 
 use App\Entity\Nft;
 use App\Entity\PurchaseNft;
@@ -16,7 +16,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
-#[Route('/purchaseNft')]
+#[Route('admin/purchaseNft')]
 class PurchaseNftController extends AbstractController
 {
     #[Route('/', name: 'app_purchase_nft_index', methods: ['GET'])]
