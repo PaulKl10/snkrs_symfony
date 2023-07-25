@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Controller;
+namespace App\Controller\admin;
 
 use App\Entity\Nft;
 use App\Form\NftType;
@@ -14,7 +14,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
-#[Route('/nft')]
+#[Route('admin/nft')]
 class NftController extends AbstractController
 {
     #[Route('/', name: 'app_nft_index', methods: ['GET'])]
@@ -30,7 +30,8 @@ class NftController extends AbstractController
                 'name' => $nft->getName(),
                 'description' => $nft->getDescription(),
                 'stock' => $nft->getStock(),
-                'launch_date' => $nft->getLaunchDate()
+                'launch_date' => $nft->getLaunchDate(),
+                'category' => $nft->getCategory()->getName()
                 // Ajoutez d'autres propriétés si nécessaire
             ];
         }
@@ -70,7 +71,8 @@ class NftController extends AbstractController
             'name' => $nft->getName(),
             'description' => $nft->getDescription(),
             'stock' => $nft->getStock(),
-            'launch_date' => $nft->getLaunchDate()
+            'launch_date' => $nft->getLaunchDate(),
+            'category' => $nft->getCategory()->getName()
             // Ajoutez d'autres propriétés si nécessaire
         ];
         return new JsonResponse($nftData);

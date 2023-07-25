@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Controller;
+namespace App\Controller\admin;
 
 use App\Entity\Adress;
 use App\Form\AdressType;
@@ -12,7 +12,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
-#[Route('/adress')]
+#[Route('admin/adress')]
 class AdressController extends AbstractController
 {
     #[Route('/', name: 'app_adress_index', methods: ['GET'])]

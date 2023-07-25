@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Controller;
+namespace App\Controller\admin;
 
 use App\Entity\User;
 use App\Form\UserType;
@@ -15,7 +15,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Annotation\Route;
 
-#[Route('/user')]
+#[Route('admin/user')]
 class UserController extends AbstractController
 {
     #[Route('/', name: 'app_user_index', methods: ['GET'])]
@@ -26,6 +26,12 @@ class UserController extends AbstractController
 
         // Itérer sur les catégories pour récupérer les informations nécessaires
         foreach ($users as $user) {
+            $address = $user->getAdress();
+            $addressResult = [
+                'street' => $address->getStreet(),
+                'city' => $address->getCity(),
+                'postalCode' => $address->getCodepostal(),
+            ];
             $usersData[] = [
                 'id' => $user->getId(),
                 'pseudo' => $user->getPseudo(),
@@ -35,7 +41,7 @@ class UserController extends AbstractController
                 'nom' => $user->getLastname(),
                 'prenom' => $user->getFirstname(),
                 'date_anniversaire' => $user->getBirthdate(),
-                'Adress' => $user->getAdress()
+                'Adress' => $addressResult,
             ];
         }
         return new JsonResponse($usersData);
@@ -73,6 +79,12 @@ class UserController extends AbstractController
     #[Route('/{id}', name: 'app_user_show', methods: ['GET'])]
     public function show(User $user): Response
     {
+        $address = $user->getAdress();
+        $addressResult = [
+            'street' => $address->getStreet(),
+            'city' => $address->getCity(),
+            'postalCode' => $address->getCodepostal(),
+        ];
         $userData[] = [
             'id' => $user->getId(),
             'pseudo' => $user->getPseudo(),
@@ -82,7 +94,7 @@ class UserController extends AbstractController
             'nom' => $user->getLastname(),
             'prenom' => $user->getFirstname(),
             'date_anniversaire' => $user->getBirthdate(),
-            'Adress' => $user->getAdress()
+            'Adress' => $addressResult
         ];
 
         return new JsonResponse($userData);
