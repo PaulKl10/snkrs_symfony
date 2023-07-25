@@ -1,0 +1,13 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Edit PurchaseNft{% endblock %}
+
+{% block body %}
+    <h1>Edit PurchaseNft</h1>
+
+    {{ include('purchase_nft/_form.html.twig', {'button_label': 'Update'}) }}
+
+    <a href="{{ path('app_purchase_nft_index') }}">back to list</a>
+
+    {{ include('purchase_nft/_delete_form.html.twig') }}
+{% endblock %}

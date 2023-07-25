@@ -1,0 +1,4 @@
+<form method="post" action="{{ path('app_purchase_nft_delete', {'id': purchase_nft.id}) }}" onsubmit="return confirm('Are you sure you want to delete this item?');">
+    <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ purchase_nft.id) }}">
+    <button class="btn">Delete</button>
+</form>
