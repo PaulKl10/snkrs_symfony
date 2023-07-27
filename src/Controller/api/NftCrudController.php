@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Controller\admin;
+namespace App\Controller\api;
 
 use App\Entity\Nft;
 use App\Form\NftType;
@@ -14,28 +14,14 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
-#[Route('admin/nft')]
-class NftController extends AbstractController
+#[Route('api/nft')]
+class NftCrudController extends AbstractController
 {
     #[Route('/', name: 'app_nft_index', methods: ['GET'])]
     public function index(NftRepository $nftRepository): Response
     {
         $nfts = $nftRepository->findAll();
-        $nftData = [];
-
-        // Itérer sur les catégories pour récupérer les informations nécessaires
-        foreach ($nfts as $nft) {
-            $nftData[] = [
-                'id' => $nft->getId(),
-                'name' => $nft->getName(),
-                'description' => $nft->getDescription(),
-                'stock' => $nft->getStock(),
-                'launch_date' => $nft->getLaunchDate(),
-                'category' => $nft->getCategory()->getName()
-                // Ajoutez d'autres propriétés si nécessaire
-            ];
-        }
-        return new JsonResponse($nftData);
+        return $this->json($nfts, context: ['groups' => 'nft:read']);
     }
 
     #[Route('/new', name: 'app_nft_new', methods: ['GET', 'POST'])]
@@ -66,16 +52,7 @@ class NftController extends AbstractController
     #[Route('/{id}', name: 'app_nft_show', methods: ['GET'])]
     public function show(Nft $nft): Response
     {
-        $nftData[] = [
-            'id' => $nft->getId(),
-            'name' => $nft->getName(),
-            'description' => $nft->getDescription(),
-            'stock' => $nft->getStock(),
-            'launch_date' => $nft->getLaunchDate(),
-            'category' => $nft->getCategory()->getName()
-            // Ajoutez d'autres propriétés si nécessaire
-        ];
-        return new JsonResponse($nftData);
+        return $this->json($nft, context: ['groups' => 'nft:read']);
     }
 
     #[Route('/{id}/edit', name: 'app_nft_edit', methods: ['GET', 'POST'])]

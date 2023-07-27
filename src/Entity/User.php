@@ -8,6 +8,7 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
+use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Security\Core\User\UserInterface;
 
 #[ORM\Entity(repositoryClass: UserRepository::class)]
@@ -16,9 +17,11 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
+    #[Groups('user:read')]
     private ?int $id = null;
 
     #[ORM\Column(length: 180, unique: true)]
+    #[Groups(['user:read', 'adress:read'])]
     private ?string $email = null;
 
     #[ORM\Column]
@@ -31,25 +34,31 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private ?string $password = null;
 
     #[ORM\Column(length: 255)]
+    #[Groups(['user:read', 'purchaseNft:read'])]
     private ?string $pseudo = null;
 
     #[ORM\Column(length: 255)]
     private ?string $gender = null;
 
     #[ORM\Column(length: 255)]
+    #[Groups('user:read')]
     private ?string $lastname = null;
 
     #[ORM\Column(length: 255)]
+    #[Groups('user:read')]
     private ?string $firstname = null;
 
     #[ORM\Column(type: Types::DATE_MUTABLE)]
+    #[Groups('user:read')]
     private ?\DateTimeInterface $birthdate = null;
 
     #[ORM\ManyToOne(inversedBy: 'users')]
     #[ORM\JoinColumn(nullable: true)]
+    #[Groups('user:read')]
     private ?Adress $Adress = null;
 
     #[ORM\OneToMany(mappedBy: 'User', targetEntity: PurchaseNft::class, orphanRemoval: true)]
+    #[Groups('user:read')]
     private Collection $purchaseNfts;
 
     public function __construct()

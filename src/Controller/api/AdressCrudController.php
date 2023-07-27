@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Controller\admin;
+namespace App\Controller\api;
 
 use App\Entity\Adress;
 use App\Form\AdressType;
@@ -12,25 +12,14 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
-#[Route('admin/adress')]
-class AdressController extends AbstractController
+#[Route('api/adress')]
+class AdressCrudController extends AbstractController
 {
     #[Route('/', name: 'app_adress_index', methods: ['GET'])]
     public function index(AdressRepository $adressRepository): Response
     {
         $adresses = $adressRepository->findAll();
-        $adressesData = [];
-
-        // Itérer sur les catégories pour récupérer les informations nécessaires
-        foreach ($adresses as $adress) {
-            $adressesData[] = [
-                'id' => $adress->getId(),
-                'street' => $adress->getStreet(),
-                'code_postal' => $adress->getCodepostal(),
-                'city' => $adress->getCity()
-            ];
-        }
-        return new JsonResponse($adressesData);
+        return $this->json($adresses, context: ['groups' => 'adress:read']);
     }
 
     #[Route('/new', name: 'app_adress_new', methods: ['GET', 'POST'])]
@@ -58,14 +47,7 @@ class AdressController extends AbstractController
     #[Route('/{id}', name: 'app_adress_show', methods: ['GET'])]
     public function show(Adress $adress): Response
     {
-        $adressData[] = [
-            'id' => $adress->getId(),
-            'street' => $adress->getStreet(),
-            'code_postal' => $adress->getCodepostal(),
-            'city' => $adress->getCity()
-        ];
-
-        return new JsonResponse($adressData);
+        return $this->json($adress, context: ['groups' => 'adress:read']);
     }
 
     #[Route('/{id}/edit', name: 'app_adress_edit', methods: ['GET', 'POST'])]

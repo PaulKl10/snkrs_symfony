@@ -5,6 +5,7 @@ namespace App\Entity;
 use App\Repository\NftPriceRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ORM\Entity(repositoryClass: NftPriceRepository::class)]
 class NftPrice
@@ -15,9 +16,11 @@ class NftPrice
     private ?int $id = null;
 
     #[ORM\Column(type: Types::DATE_MUTABLE)]
+    #[Groups(['nft:read'])]
     private ?\DateTimeInterface $price_date = null;
 
     #[ORM\Column]
+    #[Groups(['nft:read'])]
     private ?float $price_eth_value = null;
 
     #[ORM\OneToOne(inversedBy: 'nftPrice', cascade: ['persist', 'remove'])]

@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Controller\admin;
+namespace App\Controller\api;
 
 use App\Entity\NftPrice;
 use App\Form\NftPriceType;
@@ -14,8 +14,8 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
-#[Route('admin/nftPrice')]
-class NftPriceController extends AbstractController
+#[Route('api/nftPrice')]
+class NftPriceCrudController extends AbstractController
 {
     #[Route('/', name: 'app_nft_price_index', methods: ['GET'])]
     public function index(NftPriceRepository $nftPriceRepository): Response

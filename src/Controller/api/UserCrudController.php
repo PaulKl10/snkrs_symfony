@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Controller\admin;
+namespace App\Controller\api;
 
 use App\Entity\User;
 use App\Form\UserType;
@@ -15,36 +15,17 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Annotation\Route;
 
-#[Route('admin/user')]
-class UserController extends AbstractController
+#[Route('api/user')]
+class UserCrudController extends AbstractController
 {
     #[Route('/', name: 'app_user_index', methods: ['GET'])]
     public function index(UserRepository $userRepository): Response
     {
         $users = $userRepository->findAll();
-        $usersData = [];
-
-        // Itérer sur les catégories pour récupérer les informations nécessaires
-        foreach ($users as $user) {
-            $address = $user->getAdress();
-            $addressResult = [
-                'street' => $address->getStreet(),
-                'city' => $address->getCity(),
-                'postalCode' => $address->getCodepostal(),
-            ];
-            $usersData[] = [
-                'id' => $user->getId(),
-                'pseudo' => $user->getPseudo(),
-                'email' => $user->getEmail(),
-                'roles' => $user->getRoles(),
-                'sexe' => $user->getGender(),
-                'nom' => $user->getLastname(),
-                'prenom' => $user->getFirstname(),
-                'date_anniversaire' => $user->getBirthdate(),
-                'Adress' => $addressResult,
-            ];
-        }
-        return new JsonResponse($usersData);
+        return $this->json(
+            $users,
+            context: ['groups' => 'user:read']
+        );
     }
 
     #[Route('/new', name: 'app_user_new', methods: ['GET', 'POST'])]
@@ -79,25 +60,7 @@ class UserController extends AbstractController
     #[Route('/{id}', name: 'app_user_show', methods: ['GET'])]
     public function show(User $user): Response
     {
-        $address = $user->getAdress();
-        $addressResult = [
-            'street' => $address->getStreet(),
-            'city' => $address->getCity(),
-            'postalCode' => $address->getCodepostal(),
-        ];
-        $userData[] = [
-            'id' => $user->getId(),
-            'pseudo' => $user->getPseudo(),
-            'email' => $user->getEmail(),
-            'roles' => $user->getRoles(),
-            'sexe' => $user->getGender(),
-            'nom' => $user->getLastname(),
-            'prenom' => $user->getFirstname(),
-            'date_anniversaire' => $user->getBirthdate(),
-            'Adress' => $addressResult
-        ];
-
-        return new JsonResponse($userData);
+        return $this->json($user, context: ['groups' => 'user:read']);
     }
 
     #[Route('/{id}/edit', name: 'app_user_edit', methods: ['GET', 'POST'])]

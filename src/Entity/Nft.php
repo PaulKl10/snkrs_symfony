@@ -7,6 +7,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ORM\Entity(repositoryClass: NftRepository::class)]
 class Nft
@@ -14,31 +15,40 @@ class Nft
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
+    #[Groups(['nft:read'])]
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
+    #[Groups(['user:read', 'category:read', 'nft:read', 'purchaseNft:read'])]
     private ?string $name = null;
 
     #[ORM\Column(length: 255)]
+    #[Groups(['nft:read'])]
     private ?string $img = null;
 
     #[ORM\Column]
+    #[Groups(['nft:read'])]
     private ?int $stock = null;
 
     #[ORM\Column(length: 255)]
+    #[Groups(['nft:read'])]
     private ?string $description = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
+    #[Groups(['nft:read'])]
     private ?\DateTimeInterface $launch_date = null;
 
     #[ORM\ManyToOne(inversedBy: 'nfts')]
     #[ORM\JoinColumn(name: "category_id", nullable: false, referencedColumnName: "id")]
+    #[Groups(['nft:read'])]
     private ?Category $Category = null;
 
     #[ORM\OneToOne(mappedBy: 'Nft', cascade: ['persist', 'remove'])]
+    #[Groups(['nft:read'])]
     private ?NftPrice $nftPrice = null;
 
     #[ORM\OneToMany(mappedBy: 'Nft', targetEntity: PurchaseNft::class, orphanRemoval: true)]
+    #[Groups(['nft:read'])]
     private Collection $purchaseNfts;
 
     public function __construct()

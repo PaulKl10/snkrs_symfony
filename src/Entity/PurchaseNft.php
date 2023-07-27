@@ -5,6 +5,7 @@ namespace App\Entity;
 use App\Repository\PurchaseNftRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ORM\Entity(repositoryClass: PurchaseNftRepository::class)]
 class PurchaseNft
@@ -12,23 +13,29 @@ class PurchaseNft
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
+    #[Groups(['purchaseNft:read'])]
     private ?int $id = null;
 
     #[ORM\ManyToOne(inversedBy: 'purchaseNfts')]
     #[ORM\JoinColumn(nullable: false)]
+    #[Groups(['nft:read', 'purchaseNft:read'])]
     private ?User $User = null;
 
     #[ORM\ManyToOne(inversedBy: 'purchaseNfts')]
     #[ORM\JoinColumn(nullable: false)]
+    #[Groups(['user:read', 'purchaseNft:read'])]
     private ?Nft $Nft = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
+    #[Groups(['user:read', 'nft:read', 'purchaseNft:read'])]
     private ?\DateTimeInterface $purchase_date = null;
 
     #[ORM\Column]
+    #[Groups(['user:read', 'nft:read', 'purchaseNft:read'])]
     private ?float $nft_eth_price = null;
 
     #[ORM\Column]
+    #[Groups(['user:read', 'nft:read', 'purchaseNft:read'])]
     private ?float $nft_eur_price = null;
 
     public function getId(): ?int
