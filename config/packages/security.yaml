@@ -10,20 +10,28 @@ security:
       entity:
         class: App\Entity\User
         property: email
-    app_token_provider:
-      entity:
-        class: App\Entity\ApiToken
-        property: token
+    # app_token_provider:
+    #   entity:
+    #     class: App\Entity\ApiToken
+    #     property: token
     # used to reload user from session & other features (e.g. switch_user)
   firewalls:
     dev:
       pattern: ^/(_(profiler|wdt)|css|images|js)/
       security: false
+    login:
+      pattern: ^/api/login
+      stateless: true
+      json_login:
+        check_path: /api/login_check
+        username_path: email
+        password_path: password
+        success_handler: lexik_jwt_authentication.handler.authentication_success
+        failure_handler: lexik_jwt_authentication.handler.authentication_failure
     api:
       pattern: /api
-      provider: app_token_provider
       stateless: true
-      custom_authenticator: App\Security\ApiTokenAuthenticator
+      jwt: ~
     main:
       lazy: true
       provider: app_user_provider
@@ -37,6 +45,7 @@ security:
   # Easy way to control access for large sections of your site
   # Note: Only the *first* access control that matches will be used
   access_control:
+    - { path: ^/api/login, roles: IS_AUTHENTICATED_ANONYMOUSLY }
     - { path: ^/api, roles: IS_AUTHENTICATED_FULLY }
     # - { path: ^/profile, roles: ROLE_USER }
 
