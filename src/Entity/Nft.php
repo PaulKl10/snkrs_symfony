@@ -30,7 +30,7 @@ class Nft
     #[Groups(['nft:read'])]
     private ?int $stock = null;
 
-    #[ORM\Column(length: 255)]
+    #[ORM\Column(type: Types::TEXT)]
     #[Groups(['nft:read'])]
     private ?string $description = null;
 
