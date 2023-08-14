@@ -15,7 +15,7 @@ class Nft
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
-    #[Groups(['nft:read'])]
+    #[Groups(['nft:read', 'category:read'])]
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
@@ -23,11 +23,11 @@ class Nft
     private ?string $name = null;
 
     #[ORM\Column(length: 255)]
-    #[Groups(['nft:read'])]
+    #[Groups(['nft:read', 'category:read'])]
     private ?string $img = null;
 
     #[ORM\Column]
-    #[Groups(['nft:read'])]
+    #[Groups(['nft:read', 'category:read'])]
     private ?int $stock = null;
 
     #[ORM\Column(type: Types::TEXT)]
@@ -44,7 +44,7 @@ class Nft
     private ?Category $Category = null;
 
     #[ORM\OneToOne(mappedBy: 'Nft', cascade: ['persist', 'remove'])]
-    #[Groups(['nft:read'])]
+    #[Groups(['nft:read', 'category:read'])]
     private ?NftPrice $nftPrice = null;
 
     #[ORM\OneToMany(mappedBy: 'Nft', targetEntity: PurchaseNft::class, orphanRemoval: true)]

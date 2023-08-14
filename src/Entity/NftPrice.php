@@ -16,11 +16,11 @@ class NftPrice
     private ?int $id = null;
 
     #[ORM\Column(type: Types::DATE_MUTABLE)]
-    #[Groups(['nft:read'])]
+    #[Groups(['nft:read', 'category:read'])]
     private ?\DateTimeInterface $price_date = null;
 
     #[ORM\Column]
-    #[Groups(['nft:read'])]
+    #[Groups(['nft:read', 'category:read'])]
     private ?float $price_eth_value = null;
 
     #[ORM\OneToOne(inversedBy: 'nftPrice', cascade: ['persist', 'remove'])]
