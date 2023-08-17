@@ -27,35 +27,6 @@ class UserCrudController extends AbstractController
         );
     }
 
-    #[Route('/new', name: 'app_user_new', methods: ['GET', 'POST'])]
-    public function new(Request $request, EntityManagerInterface $entityManager, AdressRepository $adressRepository, UserPasswordHasherInterface $hasher): Response
-    {
-
-        if ($request->isMethod('POST')) {
-            // Récupérer les données envoyées depuis Postman
-            $data = json_decode($request->getContent(), true);
-
-            $user = new User();
-
-            $user->setPseudo($data['pseudo']);
-            $user->setEmail($data['email']);
-            $user->setPassword($hasher->hashPassword($user, $data['password']));
-            $user->setGender($data['gender']);
-            $user->setRoles(['ROLE_USER']);
-            $user->setLastname($data['lastname']);
-            $user->setFirstname($data['firstname']);
-            $user->setBirthdate(new DateTime($data['birthDate']));
-            $user->setAdress($adressRepository->find($data['adress']));
-
-            $entityManager->persist($user);
-            $entityManager->flush();
-
-            return new JsonResponse(['message' => 'Nouvelle utilisateur enregistré avec succès.']);
-        }
-
-        return new JsonResponse(['message' => 'Méthode non autorisée. Veuillez utiliser une requête POST.'], Response::HTTP_METHOD_NOT_ALLOWED);
-    }
-
     #[Route('/{id}', name: 'app_user_show', methods: ['GET'])]
     public function show(User $user): Response
     {

@@ -23,11 +23,17 @@ class AdressCrudController extends AbstractController
     }
 
     #[Route('/new', name: 'app_adress_new', methods: ['GET', 'POST'])]
-    public function new(Request $request, EntityManagerInterface $entityManager): Response
+    public function new(Request $request, EntityManagerInterface $entityManager, AdressRepository $adressRepository): Response
     {
         if ($request->isMethod('POST')) {
             // Récupérer les données envoyées depuis Postman
             $data = json_decode($request->getContent(), true);
+            // Vérifier si l'utilisateur existe déjà par e-mail ou pseudo
+            $existingAdress = $adressRepository->findOneBy(['street' => $data['street']]);
+
+            if ($existingAdress) {
+                return new JsonResponse(['message' => 'Cet adresse existe déjà.']);
+            }
 
             $adress = new Adress();
 
@@ -38,7 +44,7 @@ class AdressCrudController extends AbstractController
             $entityManager->persist($adress);
             $entityManager->flush();
 
-            return new JsonResponse(['message' => 'Nouvelle adresse enregistrée avec succès.']);
+            return new JsonResponse(['message' => 'Nouvelle adresse enregistrée avec succès.', 'id' => $adress->getId()]);
         }
 
         return new JsonResponse(['message' => 'Méthode non autorisée. Veuillez utiliser une requête POST.'], Response::HTTP_METHOD_NOT_ALLOWED);
