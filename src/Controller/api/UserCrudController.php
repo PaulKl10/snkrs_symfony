@@ -27,6 +27,20 @@ class UserCrudController extends AbstractController
         );
     }
 
+    #[Route('/findBy', name: 'app_user_findBy', methods: ['POST'])]
+    public function findBy(UserRepository $userRepository, Request $request): Response
+    {
+        if ($request->isMethod('POST')) {
+            $data = json_decode($request->getContent(), true);
+
+            $users = $userRepository->findOneBy(['email' => $data['email']]);
+            return $this->json(
+                $users,
+                context: ['groups' => 'user:read']
+            );
+        }
+    }
+
     #[Route('/{id}', name: 'app_user_show', methods: ['GET'])]
     public function show(User $user): Response
     {

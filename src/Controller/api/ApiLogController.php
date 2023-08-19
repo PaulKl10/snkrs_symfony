@@ -38,6 +38,7 @@ class ApiLogController extends AbstractController
                 // L'utilisateur n'a pas été trouvé ou le mot de passe est incorrect
                 return $this->json(['message' => 'Identifiants invalides'], Response::HTTP_UNAUTHORIZED);
             }
+
             // Génére le token JWT
             $token = $this->generateTokenForUser($user, $this->JWTManager);
 
@@ -91,7 +92,8 @@ class ApiLogController extends AbstractController
     private function generateTokenForUser(User $user, JWTTokenManagerInterface $tokenManager): string
     {
         $payload = [
-            'email' => $user->getUserIdentifier()
+            'email' => $user->getUserIdentifier(),
+            'id' => $user->getId(),
         ];
 
         // Génére le token JWT 
