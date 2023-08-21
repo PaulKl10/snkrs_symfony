@@ -43,7 +43,7 @@ class PurchaseNftCrudController extends AbstractController
     public function new(Request $request, EntityManagerInterface $entityManager, NftRepository $nftRepository, UserRepository $userRepository): Response
     {
         if ($request->isMethod('POST')) {
-            // Récupérer les données envoyées depuis Postman
+            
             $data = json_decode($request->getContent(), true);
             $purchase = new PurchaseNft();
 
