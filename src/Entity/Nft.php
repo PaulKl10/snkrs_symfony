@@ -23,7 +23,7 @@ class Nft
     private ?string $name = null;
 
     #[ORM\Column(length: 255)]
-    #[Groups(['nft:read', 'category:read'])]
+    #[Groups(['nft:read', 'category:read', 'user:read'])]
     private ?string $img = null;
 
     #[ORM\Column]
@@ -31,20 +31,20 @@ class Nft
     private ?int $stock = null;
 
     #[ORM\Column(type: Types::TEXT)]
-    #[Groups(['nft:read'])]
+    #[Groups(['nft:read', 'user:read'])]
     private ?string $description = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
-    #[Groups(['nft:read'])]
+    #[Groups(['nft:read', 'user:read'])]
     private ?\DateTimeInterface $launch_date = null;
 
     #[ORM\ManyToOne(inversedBy: 'nfts')]
     #[ORM\JoinColumn(name: "category_id", nullable: false, referencedColumnName: "id")]
-    #[Groups(['nft:read'])]
+    #[Groups(['nft:read', 'user:read'])]
     private ?Category $Category = null;
 
     #[ORM\OneToOne(mappedBy: 'Nft', cascade: ['persist', 'remove'])]
-    #[Groups(['nft:read', 'category:read'])]
+    #[Groups(['nft:read', 'category:read', 'user:read'])]
     private ?NftPrice $nftPrice = null;
 
     #[ORM\OneToMany(mappedBy: 'Nft', targetEntity: PurchaseNft::class, orphanRemoval: true)]

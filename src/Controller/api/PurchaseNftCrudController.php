@@ -43,7 +43,7 @@ class PurchaseNftCrudController extends AbstractController
     public function new(Request $request, EntityManagerInterface $entityManager, NftRepository $nftRepository, UserRepository $userRepository): Response
     {
         if ($request->isMethod('POST')) {
-            
+
             $data = json_decode($request->getContent(), true);
             $purchase = new PurchaseNft();
 
@@ -91,10 +91,10 @@ class PurchaseNftCrudController extends AbstractController
     #[Route('/{id}', name: 'app_purchase_nft_delete', methods: ['POST'])]
     public function delete(Request $request, PurchaseNft $purchaseNft, EntityManagerInterface $entityManager): Response
     {
-        if ($this->isCsrfTokenValid('delete' . $purchaseNft->getId(), $request->request->get('_token'))) {
-            $entityManager->remove($purchaseNft);
-            $entityManager->flush();
-        }
+        // if ($this->isCsrfTokenValid('delete' . $purchaseNft->getId(), $request->request->get('_token'))) {
+        $entityManager->remove($purchaseNft);
+        $entityManager->flush();
+        // }
 
         return $this->redirectToRoute('app_purchase_nft_index', [], Response::HTTP_SEE_OTHER);
     }

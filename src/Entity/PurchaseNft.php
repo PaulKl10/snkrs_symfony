@@ -13,7 +13,7 @@ class PurchaseNft
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
-    #[Groups(['purchaseNft:read'])]
+    #[Groups(['purchaseNft:read', 'user:read'])]
     private ?int $id = null;
 
     #[ORM\ManyToOne(inversedBy: 'purchaseNfts')]

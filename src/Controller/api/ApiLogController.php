@@ -21,33 +21,6 @@ class ApiLogController extends AbstractController
     {
     }
 
-    #[Route('/api/login', name: 'app_api_login', methods: ['POST'])]
-    public function login(Request $request, UserRepository $userRepository): Response
-    {
-        if ($request->isMethod('POST')) {
-            // Récupérez les données du formulaire soumises par le front-end
-            $data = json_decode($request->getContent(), true);
-
-            $email = $data['email'];
-            $password = $data['password'];
-
-            $user = $userRepository->findOneBy(['email' => $email]);
-
-            // Vérifiez si l'utilisateur existe et si le mot de passe est correct, par exemple :
-            if (!$user || !$this->passwordEncoder->isPasswordValid($user, $password)) {
-                // L'utilisateur n'a pas été trouvé ou le mot de passe est incorrect
-                return $this->json(['message' => 'Identifiants invalides'], Response::HTTP_UNAUTHORIZED);
-            }
-
-            // Génére le token JWT
-            $token = $this->generateTokenForUser($user, $this->JWTManager);
-
-            // Répondre avec le token JWT
-            return new JsonResponse(['status' => true, 'token' => $token], Response::HTTP_OK);
-        }
-        return new JsonResponse(['message' => 'Méthode non autorisée. Veuillez utiliser une requête POST.'], Response::HTTP_METHOD_NOT_ALLOWED);
-    }
-
     #[Route('/api/logout', name: 'app_api_logout', methods: ['POST'])]
     public function logout()
     {
@@ -68,13 +41,26 @@ class ApiLogController extends AbstractController
                 return new JsonResponse(['message' => 'Cet utilisateur existe déjà.'], Response::HTTP_CONFLICT);
             }
 
+            // Vérifier les champs requis
+            if (
+                !isset($data['pseudo']) ||
+                !isset($data['email']) ||
+                !isset($data['password']) ||
+                !isset($data['gender']) ||
+                !isset($data['lastname']) ||
+                !isset($data['firstname']) ||
+                !isset($data['birthDate']) ||
+                !isset($data['adress'])
+            ) {
+                return new JsonResponse(['message' => 'Données manquantes.'], Response::HTTP_BAD_REQUEST);
+            }
+
             $user = new User();
 
             $user->setPseudo($data['pseudo']);
             $user->setEmail($data['email']);
             $user->setPassword($this->passwordEncoder->hashPassword($user, $data['password']));
             $user->setGender($data['gender']);
-            $user->setRoles(['ROLE_USER']);
             $user->setLastname($data['lastname']);
             $user->setFirstname($data['firstname']);
             $user->setBirthdate(new DateTime($data['birthDate']));
@@ -87,16 +73,5 @@ class ApiLogController extends AbstractController
         }
 
         return new JsonResponse(['message' => 'Méthode non autorisée. Veuillez utiliser une requête POST.'], Response::HTTP_METHOD_NOT_ALLOWED);
-    }
-
-    private function generateTokenForUser(User $user, JWTTokenManagerInterface $tokenManager): string
-    {
-        $payload = [
-            'email' => $user->getUserIdentifier(),
-            'id' => $user->getId(),
-        ];
-
-        // Génére le token JWT 
-        return $tokenManager->create($user, $payload);
     }
 }
