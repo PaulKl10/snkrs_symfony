@@ -23,20 +23,11 @@ class PurchaseNftCrudController extends AbstractController
     public function index(PurchaseNftRepository $purchaseNftRepository): Response
     {
         $purchases = $purchaseNftRepository->findAll();
-        $purchasesData = [];
 
-        // Itérer sur les catégories pour récupérer les informations nécessaires
-        foreach ($purchases as $purchase) {
-            $purchasesData[] = [
-                'id' => $purchase->getId(),
-                'nft' => $purchase->getNft(),
-                'user' => $purchase->getUser(),
-                'date' => $purchase->getPurchaseDate(),
-                'prix euro' => $purchase->getNftEurPrice(),
-                'prix ETH' => $purchase->getNftEthPrice(),
-            ];
-        }
-        return new JsonResponse($purchasesData);
+        return $this->json(
+            $purchases,
+            context: ['groups' => 'purchaseNft:read']
+        );
     }
 
     #[Route('/new', name: 'app_purchase_nft_new', methods: ['GET', 'POST'])]

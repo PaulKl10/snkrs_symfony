@@ -14,15 +14,15 @@ class Category
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
-    #[Groups('category:read')]
+    #[Groups(['category:read', 'nft:read', 'purchaseNft:read', 'user:read'])]
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
-    #[Groups(['category:read', 'nft:read'])]
+    #[Groups(['category:read', 'nft:read', 'purchaseNft:read', 'user:read'])]
     private ?string $name = null;
 
     #[ORM\Column(length: 255)]
-    #[Groups('category:read')]
+    #[Groups(['category:read', 'nft:read', 'purchaseNft:read', 'user:read'])]
     private ?string $description = null;
 
     #[ORM\OneToMany(mappedBy: 'Category', targetEntity: Nft::class, orphanRemoval: true)]

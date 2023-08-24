@@ -15,7 +15,7 @@ class Nft
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
-    #[Groups(['nft:read', 'category:read', 'user:read'])]
+    #[Groups(['nft:read', 'category:read', 'user:read', 'purchaseNft:read'])]
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
@@ -23,15 +23,15 @@ class Nft
     private ?string $name = null;
 
     #[ORM\Column(length: 255)]
-    #[Groups(['nft:read', 'category:read', 'user:read'])]
+    #[Groups(['nft:read', 'category:read', 'user:read', 'purchaseNft:read'])]
     private ?string $img = null;
 
     #[ORM\Column]
-    #[Groups(['nft:read', 'category:read'])]
+    #[Groups(['nft:read', 'category:read', 'purchaseNft:read', 'user:read'])]
     private ?int $stock = null;
 
     #[ORM\Column(type: Types::TEXT)]
-    #[Groups(['nft:read', 'user:read'])]
+    #[Groups(['nft:read', 'user:read', 'purchaseNft:read'])]
     private ?string $description = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]

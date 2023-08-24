@@ -77,7 +77,7 @@ class NftCrudController extends AbstractController
         return new JsonResponse(['message' => 'Méthode non autorisée. Veuillez utiliser une requête POST.'], Response::HTTP_METHOD_NOT_ALLOWED);
     }
 
-    #[Route('/{id}', name: 'app_nft_delete', methods: ['POST'])]
+    #[Route('/{id}', name: 'app_nft_delete', methods: ['DELETE'])]
     public function delete(Request $request, Nft $nft, EntityManagerInterface $entityManager): Response
     {
         $entityManager->remove($nft);
