@@ -69,7 +69,7 @@ class AdressCrudController extends AbstractController
 
             $entityManager->flush();
 
-            return new JsonResponse(['message' => 'Adresse modifié avec succès.']);
+            return new JsonResponse(['message' => 'Adresse modifié avec succès.', 'id' => $adress->getId()]);
         }
     }
 

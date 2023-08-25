@@ -71,6 +71,62 @@ class UserCrudController extends AbstractController
         return new JsonResponse(['message' => 'Méthode non autorisée. Veuillez utiliser une requête POST.'], Response::HTTP_METHOD_NOT_ALLOWED);
     }
 
+    #[Route('/{id}/editAdmin', name: 'app_user_editAdmin', methods: ['GET', 'POST'])]
+    public function editAdmin(Request $request, User $user, EntityManagerInterface $entityManager, AdressRepository $adressRepository): Response
+    {
+        if ($request->isMethod('POST')) {
+            // Récupérer les données envoyées depuis Postman
+            $data = json_decode($request->getContent(), true);
+            if (
+                !isset($data['pseudo']) ||
+                !isset($data['email']) ||
+                !isset($data['gender']) ||
+                !isset($data['lastname']) ||
+                !isset($data['firstname']) ||
+                !isset($data['birthDate']) ||
+                !isset($data['adress'])
+            ) {
+                if (!isset($data['pseudo'])) {
+                    $missingKeys[] = 'pseudo';
+                }
+                if (!isset($data['email'])) {
+                    $missingKeys[] = 'email';
+                }
+                if (!isset($data['gender'])) {
+                    $missingKeys[] = 'gender';
+                }
+                if (!isset($data['lastname'])) {
+                    $missingKeys[] = 'lastname';
+                }
+                if (!isset($data['firstname'])) {
+                    $missingKeys[] = 'firstname';
+                }
+                if (!isset($data['birthDate'])) {
+                    $missingKeys[] = 'birthDate';
+                }
+                if (!isset($data['adress'])) {
+                    $missingKeys[] = 'adress';
+                }
+
+                return new JsonResponse(['message' => 'Données manquantes.', 'missing_keys' => $missingKeys], Response::HTTP_BAD_REQUEST);
+            }
+
+            $user->setPseudo($data['pseudo']);
+            $user->setEmail($data['email']);
+            $user->setGender($data['gender']);
+            $user->setLastname($data['lastname']);
+            $user->setFirstname($data['firstname']);
+            $user->setBirthdate(new DateTime($data['birthDate']));
+            $user->setAdress($adressRepository->find($data['adress']));
+
+            $entityManager->flush();
+
+            return new JsonResponse(['message' => 'utilisateur modifié avec succès.']);
+        }
+
+        return new JsonResponse(['message' => 'Méthode non autorisée. Veuillez utiliser une requête POST.'], Response::HTTP_METHOD_NOT_ALLOWED);
+    }
+
     #[Route('/{id}', name: 'app_user_delete', methods: ['DELETE'])]
     public function delete(Request $request, User $user, EntityManagerInterface $entityManager): Response
     {
